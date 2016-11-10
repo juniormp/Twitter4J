@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import twitter4j.Query;
@@ -28,15 +27,8 @@ public final class TwitterControl {
 	 */
 	public int qtdTwettsUltimaSemana(Twitter twitter, String search) throws TwitterException {
 
-		LocalDate ultimoDia = LocalDate.now().minusDays(7);
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-		int i = 1;
-
-		Query query = new Query(search);
-		query.count(100);
-		query.since(ultimoDia.format(dateTimeFormatter));
-		QueryResult resultado = twitter.search(query);
+		QueryResult resultado = tweetsUltimaSemana(twitter, search);
+		int i = 0;
 
 		for (Status status : resultado.getTweets()) {
 			if (!status.isRetweet()) {
@@ -48,18 +40,10 @@ public final class TwitterControl {
 
 	}
 
-	
 	public int qtdRetweetsUltimaSemana(Twitter twitter, String search) throws TwitterException {
 
-		LocalDate ultimoDia = LocalDate.now().minusDays(7);
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-		int i = 1;
-
-		Query query = new Query(search);
-		query.count(100);
-		query.since(ultimoDia.format(dateTimeFormatter));
-		QueryResult resultado = twitter.search(query);
+		QueryResult resultado = tweetsUltimaSemana(twitter, search);
+		int i = 0;
 
 		for (Status status : resultado.getTweets()) {
 			if (status.isRetweet()) {
@@ -71,13 +55,27 @@ public final class TwitterControl {
 
 	}
 
-	
-	
-	public QueryResult orderByName(QueryResult result) {
+	public int qtdFavoritosUltimaSemana(Twitter twitter, String search) throws TwitterException {
 
+		QueryResult resultado = tweetsUltimaSemana(twitter, search);
+		int i = 0;
+
+		for (Status status : resultado.getTweets()) {
+			if (status.isFavorited()) {
+				i++;
+			}
+		}
+
+		return i;
+
+	}
+
+	public List<Status> ordernarPorNome(Twitter twitter, String search) throws TwitterException {
+
+		QueryResult resultado = tweetsUltimaSemana(twitter, search);
 		List<Status> list = new ArrayList<>();
 
-		list = result.getTweets();
+		list = resultado.getTweets();
 
 		Collections.sort(list, new Comparator<Status>() {
 			@Override
@@ -86,7 +84,38 @@ public final class TwitterControl {
 			}
 		});
 
-		return result;
+		return list;
 
+	}
+
+	public List<Status> ordernarPorData(Twitter twitter, String search) throws TwitterException {
+
+		QueryResult resultado = tweetsUltimaSemana(twitter, search);
+		List<Status> list = new ArrayList<>();
+		
+		list = resultado.getTweets();
+
+		Collections.sort(list, new Comparator<Status>() {
+			@Override
+			public int compare(Status s1, Status s2) {
+				return s1.getUser().getCreatedAt().compareTo(s2.getUser().getCreatedAt());
+			}
+		});
+
+		return list;
+
+	}
+
+	public QueryResult tweetsUltimaSemana(Twitter twitter, String search) throws TwitterException {
+
+		LocalDate ultimoDia = LocalDate.now().minusDays(7);
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		Query query = new Query(search);
+		query.count(100);
+		query.since(ultimoDia.format(dateTimeFormatter));
+		QueryResult resultado = twitter.search(query);
+
+		return resultado;
 	}
 }
