@@ -1,4 +1,4 @@
-package br.com.twitte4j.view;
+package br.com.twitter4j.view;
 
 import java.util.List;
 
