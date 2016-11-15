@@ -25,7 +25,7 @@ public final class TwitterControl {
 	 * @return QueryResult objeto com o resultado da busca
 	 * @throws TwitterException
 	 */
-	public int qtdTwettsUltimaSemana(Twitter twitter, String search) throws TwitterException {
+	public int qtdTwettsUltimaSemana(Twitter twitter, String search) {
 
 		QueryResult resultado = tweetsUltimaSemana(twitter, search);
 		int i = 0;
@@ -37,10 +37,16 @@ public final class TwitterControl {
 		}
 
 		return i;
-
 	}
 
-	public int qtdRetweetsUltimaSemana(Twitter twitter, String search) throws TwitterException {
+	/**
+	 * Retornar a qtd de Retwetts feito ha 7 dias atras ate o dia atual
+	 * 
+	 * @param twitter
+	 * @param search
+	 * @return
+	 */
+	public int qtdRetweetsUltimaSemana(Twitter twitter, String search) {
 
 		QueryResult resultado = tweetsUltimaSemana(twitter, search);
 		int i = 0;
@@ -55,7 +61,14 @@ public final class TwitterControl {
 
 	}
 
-	public int qtdFavoritosUltimaSemana(Twitter twitter, String search) throws TwitterException {
+	/**
+	 * Retornar a qtd de favoritos feito ha 7 dias atras ate o dia atual
+	 * 
+	 * @param twitter
+	 * @param search
+	 * @return
+	 */
+	public int qtdFavoritosUltimaSemana(Twitter twitter, String search) {
 
 		QueryResult resultado = tweetsUltimaSemana(twitter, search);
 		int i = 0;
@@ -70,52 +83,68 @@ public final class TwitterControl {
 
 	}
 
-	public List<Status> ordernarPorNome(Twitter twitter, String search) throws TwitterException {
+	/**
+	 * Ordena os tweets por ordem alfabetica
+	 * 
+	 * @param twitter
+	 * @param search
+	 * @return
+	 */
+	public List<Status> ordernarPorNome(Twitter twitter, String search) {
 
 		QueryResult resultado = tweetsUltimaSemana(twitter, search);
 		List<Status> list = new ArrayList<>();
 
 		list = resultado.getTweets();
 
-		Collections.sort(list, new Comparator<Status>() {
-			@Override
-			public int compare(Status s1, Status s2) {
-				return s1.getUser().getName().compareTo(s2.getUser().getName());
-			}
-		});
+		list.sort((a, b) -> a.getUser().getName().compareTo(b.getUser().getName()));
 
 		return list;
-
 	}
 
-	public List<Status> ordernarPorData(Twitter twitter, String search) throws TwitterException {
+	/**
+	 * Ordena os tweets por data do mais recente
+	 * 
+	 * @param twitter
+	 * @param search
+	 * @return
+	 */
+	public List<Status> ordernarPorData(Twitter twitter, String search) {
 
 		QueryResult resultado = tweetsUltimaSemana(twitter, search);
 		List<Status> list = new ArrayList<>();
-		
+
 		list = resultado.getTweets();
 
-		Collections.sort(list, new Comparator<Status>() {
-			@Override
-			public int compare(Status s1, Status s2) {
-				return s1.getUser().getCreatedAt().compareTo(s2.getUser().getCreatedAt());
-			}
-		});
+		list.sort((a, b) -> a.getUser().getCreatedAt().compareTo(b.getUser().getCreatedAt()));
 
 		return list;
 
 	}
 
-	public QueryResult tweetsUltimaSemana(Twitter twitter, String search) throws TwitterException {
+	/**
+	 * Retorna todos os tweets/retweets feito ha 7 dias atras ate o dia atual
+	 * 
+	 * @param twitter
+	 * @param search
+	 * @return
+	 */
+	public QueryResult tweetsUltimaSemana(Twitter twitter, String search) {
 
-		LocalDate ultimoDia = LocalDate.now().minusDays(7);
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		try {
+			LocalDate ultimoDia = LocalDate.now().minusDays(7);
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-		Query query = new Query(search);
-		query.count(100);
-		query.since(ultimoDia.format(dateTimeFormatter));
-		QueryResult resultado = twitter.search(query);
+			Query query = new Query(search);
+			query.count(100);
+			query.since(ultimoDia.format(dateTimeFormatter));
+			QueryResult resultado = twitter.search(query);
 
-		return resultado;
+			return resultado;
+		} catch (TwitterException e) {
+			System.err.println("Erro ao realizar busca");
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
