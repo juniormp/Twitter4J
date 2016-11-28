@@ -22,7 +22,7 @@ public class Main {
 
 		qtdTwettsUltimaSemana(control, twitter, twitterIO);
 
-		qtsretweetsUltimaSemana(control, twitter, twitterIO);
+		qtsRetweetsUltimaSemana(control, twitter, twitterIO);
 
 		qtsFavoritosUltimaSemana(control, twitter, twitterIO);
 
@@ -57,7 +57,7 @@ public class Main {
 		twitterIO.registra(resultado);
 	}
 
-	private static void qtsretweetsUltimaSemana(TwitterControl control, Twitter twitter, TwitterIO twitterIO) {
+	private static void qtsRetweetsUltimaSemana(TwitterControl control, Twitter twitter, TwitterIO twitterIO) {
 		System.out.print("2. Quantidade por dia de retweets da última semana: ");
 		resultado = control.qtdRetweetsUltimaSemana(twitter, busca);
 		System.out.print(resultado + " Retweets criado sobre " + busca + "\n");

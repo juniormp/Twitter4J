@@ -3,8 +3,6 @@ package br.com.twitter4j.controller;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import twitter4j.Query;
@@ -57,6 +55,8 @@ public final class TwitterControl {
 			}
 		}
 
+		
+		
 		return i;
 
 	}
@@ -147,4 +147,7 @@ public final class TwitterControl {
 			return null;
 		}
 	}
+
+
+
 }
