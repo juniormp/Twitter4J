@@ -2,7 +2,7 @@ package br.com.twitter4j.view;
 
 import java.util.List;
 
-import br.com.twitter4j.controller.TwitterConnection;
+import br.com.twitter4j.config.TwitterConnection;
 import br.com.twitter4j.controller.TwitterControl;
 import br.com.twitter4j.io.TwitterIO;
 import twitter4j.Status;
@@ -42,7 +42,7 @@ public class Main {
 	}
 
 	private static void ordernarPorNome(TwitterControl control, Twitter twitter, TwitterIO twitterIO) {
-		System.out.print("4. Ordenar os tweets pelo nome do autor, e exibir o primeiro nome e o último nome: \n");
+		System.out.print("4. Ordenar os tweets pelo nome do autor, e exibir o primeiro nome e o uÌ�ltimo nome: \n");
 		list = control.ordernarPorNome(twitter, busca);
 		for (Status status : list) {
 			System.out.println(status.getUser().getName());
@@ -51,21 +51,21 @@ public class Main {
 	}
 
 	private static void qtsFavoritosUltimaSemana(TwitterControl control, Twitter twitter, TwitterIO twitterIO) {
-		System.out.print("3. Quantidade por dia de favoritos da última semana: ");
+		System.out.print("3. Quantidade por dia de favoritos da uÌ�ltima semana: ");
 		resultado = control.qtdFavoritosUltimaSemana(twitter, busca);
 		System.out.print(resultado + " Tweets favoritado sobre " + busca + "\n");
 		twitterIO.registra(resultado);
 	}
 
 	private static void qtsRetweetsUltimaSemana(TwitterControl control, Twitter twitter, TwitterIO twitterIO) {
-		System.out.print("2. Quantidade por dia de retweets da última semana: ");
+		System.out.print("2. Quantidade por dia de retweets da uÌ�ltima semana: ");
 		resultado = control.qtdRetweetsUltimaSemana(twitter, busca);
 		System.out.print(resultado + " Retweets criado sobre " + busca + "\n");
 		twitterIO.registra(resultado);
 	}
 
 	private static void qtdTwettsUltimaSemana(TwitterControl control, Twitter twitter, TwitterIO twitterIO) {
-		System.out.print("1. Quantidade por dia de tweets da última semana: ");
+		System.out.print("1. Quantidade por dia de tweets da uÌ�ltima semana: ");
 		resultado = control.qtdTwettsUltimaSemana(twitter, busca);
 		System.out.print(resultado + " Tweets criado sobre " + busca + "\n");
 		twitterIO.registra(resultado);
