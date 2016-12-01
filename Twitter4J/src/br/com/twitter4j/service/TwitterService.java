@@ -5,10 +5,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import br.com.twitter4j.config.TwitterConnection;
 import twitter4j.Query;
@@ -23,6 +24,23 @@ public class TwitterService {
 
 	public TwitterService(){
 		twitter = TwitterConnection.getApiCredentials();
+	}
+	
+	public Status enviarNovoTweet(String msg){
+		
+		Status tweet = null;
+		
+		if(msg != null && msg.length() <= 140){
+			try {
+				tweet = twitter.updateStatus(msg + " @michelpf");
+			} catch (TwitterException e) {
+				e.printStackTrace();
+			}
+		} else {
+			throw new IllegalArgumentException("Tweet não pode ser nulo e deve ser menor do que 140 caracteres!");
+		}
+		
+		return tweet;
 	}
 
 	/*
@@ -150,26 +168,28 @@ public class TwitterService {
 
 	}
 
-	public List<Status> consultarTweetsOrdernadosPorNomeERetornaApenasOPrimeiroEOUltimo(String search) {
+	public Set<Status> consultarTweetsOrdernadosPorNomeERetornaApenasOPrimeiroEOUltimo(String search) {
 
 		List<Status> tweets = consultarTweetsUltimaSemana(search);
 
 		tweets.sort((a, b) -> a.getUser().getName().compareTo(b.getUser().getName())); // Ordenando a lista pelo nome do autor
 
-		List<Status> apenasOPrimeiroEOUltimo = Arrays.asList(tweets.stream().findFirst().get(),
-															 tweets.stream().reduce((first, second) -> second).get());
+		Set<Status> apenasOPrimeiroEOUltimo = new LinkedHashSet<>();
+		apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
+		apenasOPrimeiroEOUltimo.add(tweets.stream().reduce((first, second) -> second).get()); // Ultimo
 
 		return apenasOPrimeiroEOUltimo;
 	}
 
-	public List<Status> consultarTweetsOrdernadosPorDataERetornaApenasOPrimeiroEOUltimo(String search) {
+	public Set<Status> consultarTweetsOrdernadosPorDataERetornaApenasOPrimeiroEOUltimo(String search) {
 
 		List<Status> tweets = consultarTweetsUltimaSemana(search);
 
 		tweets.sort((a, b) -> a.getUser().getCreatedAt().compareTo(b.getUser().getCreatedAt())); // Ordenando a lista pela data do tweet
 
-		List<Status> apenasOPrimeiroEOUltimo = Arrays.asList(tweets.stream().findFirst().get(),
-															 tweets.stream().reduce((first, second) -> second).get());
+		Set<Status> apenasOPrimeiroEOUltimo = new LinkedHashSet<>();
+		apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
+		apenasOPrimeiroEOUltimo.add(tweets.stream().reduce((first, second) -> second).get()); // Ultimo
 
 		return apenasOPrimeiroEOUltimo;
 
@@ -199,7 +219,7 @@ public class TwitterService {
 
 	private Map<String, Long> gerarMapPorDias(long SEGUNDA_FEIRA, long TERCA_FEIRA, long QUARTA_FEIRA, long QUINTA_FEIRA,
 			long SEXTA_FEIRA, long SABADO, long DOMINGO) {
-		Map<String, Long> totaisPorDiaDaSemana = new HashMap<>();
+		Map<String, Long> totaisPorDiaDaSemana = new LinkedHashMap<>(); // Para manter a ordem de insercao
 		totaisPorDiaDaSemana.put("Segunda-Feira", SEGUNDA_FEIRA);
 		totaisPorDiaDaSemana.put("Terca-Feira", TERCA_FEIRA);
 		totaisPorDiaDaSemana.put("Quarta-Feira", QUARTA_FEIRA);
