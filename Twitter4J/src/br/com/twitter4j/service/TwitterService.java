@@ -17,6 +17,7 @@ import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import twitter4j.Query.ResultType;
 
 public class TwitterService {
 
@@ -96,31 +97,38 @@ public class TwitterService {
 
 		long SEGUNDA_FEIRA = tweets
 			.stream().
-			filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.MONDAY && tweet.isRetweeted()).count();
+			filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.MONDAY && tweet.isRetweeted())
+			.mapToLong(tweet -> tweet.getRetweetCount()).count();
 
 		long TERCA_FEIRA = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.TUESDAY && tweet.isRetweeted()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.TUESDAY && tweet.isRetweeted())
+				.mapToLong(tweet -> tweet.getRetweetCount()).count();
 
 		long QUARTA_FEIRA = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.WEDNESDAY && tweet.isRetweeted()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.WEDNESDAY && tweet.isRetweeted())
+				.mapToLong(tweet -> tweet.getRetweetCount()).count();
 
 		long QUINTA_FEIRA = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.THURSDAY && tweet.isRetweeted()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.THURSDAY && tweet.isRetweeted())
+				.mapToLong(tweet -> tweet.getRetweetCount()).count();
 
 		long SEXTA_FEIRA = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.FRIDAY && tweet.isRetweeted()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.FRIDAY && tweet.isRetweeted())
+				.mapToLong(tweet -> tweet.getRetweetCount()).count();
 
 		long SABADO = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.SATURDAY && tweet.isRetweeted()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.SATURDAY && tweet.isRetweeted())
+				.mapToLong(tweet -> tweet.getRetweetCount()).count();
 
 		long DOMINGO = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.SUNDAY && tweet.isRetweeted()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.SUNDAY && tweet.isRetweeted())
+				.mapToLong(tweet -> tweet.getRetweetCount()).count();
 
 		Map<String, Long> totaisPorDiaDaSemana = this.gerarMapPorDias(SEGUNDA_FEIRA, TERCA_FEIRA, QUARTA_FEIRA, QUINTA_FEIRA,
 				SEXTA_FEIRA, SABADO, DOMINGO);
@@ -135,31 +143,38 @@ public class TwitterService {
 
 		long SEGUNDA_FEIRA = tweets
 			.stream().
-			filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.MONDAY && tweet.isFavorited()).count();
+			filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.MONDAY && tweet.isFavorited())
+			.mapToLong(tweet -> tweet.getFavoriteCount()).count();
 
 		long TERCA_FEIRA = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.TUESDAY && tweet.isFavorited()).count();
-
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.TUESDAY && tweet.isFavorited())
+				.mapToLong(tweet -> tweet.getFavoriteCount()).count();
+		
 		long QUARTA_FEIRA = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.WEDNESDAY && tweet.isFavorited()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.WEDNESDAY && tweet.isFavorited())
+				.mapToLong(tweet -> tweet.getFavoriteCount()).count();
 
 		long QUINTA_FEIRA = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.THURSDAY && tweet.isFavorited()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.THURSDAY && tweet.isFavorited())
+				.mapToLong(tweet -> tweet.getFavoriteCount()).count();
 
 		long SEXTA_FEIRA = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.FRIDAY && tweet.isFavorited()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.FRIDAY && tweet.isFavorited())
+				.mapToLong(tweet -> tweet.getFavoriteCount()).count();
 
 		long SABADO = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.SATURDAY && tweet.isFavorited()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.SATURDAY && tweet.isFavorited())
+				.mapToLong(tweet -> tweet.getFavoriteCount()).count();
 
 		long DOMINGO = tweets
 				.stream().
-				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.SUNDAY && tweet.isFavorited()).count();
+				filter(tweet -> tweet.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek() == DayOfWeek.SUNDAY && tweet.isFavorited())
+				.mapToLong(tweet -> tweet.getFavoriteCount()).count();
 
 		Map<String, Long> totaisPorDiaDaSemana = this.gerarMapPorDias(SEGUNDA_FEIRA, TERCA_FEIRA, QUARTA_FEIRA, QUINTA_FEIRA,
 				SEXTA_FEIRA, SABADO, DOMINGO);
@@ -170,7 +185,7 @@ public class TwitterService {
 
 	public Set<Status> consultarTweetsOrdernadosPorNomeERetornaApenasOPrimeiroEOUltimo(String search) {
 
-		List<Status> tweets = consultarTweetsUltimaSemana(search);
+		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
 
 		tweets.sort((a, b) -> a.getUser().getName().compareTo(b.getUser().getName())); // Ordenando a lista pelo nome do autor
 
@@ -183,7 +198,7 @@ public class TwitterService {
 
 	public Set<Status> consultarTweetsOrdernadosPorDataERetornaApenasOPrimeiroEOUltimo(String search) {
 
-		List<Status> tweets = consultarTweetsUltimaSemana(search);
+		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
 
 		tweets.sort((a, b) -> a.getUser().getCreatedAt().compareTo(b.getUser().getCreatedAt())); // Ordenando a lista pela data do tweet
 
@@ -204,11 +219,17 @@ public class TwitterService {
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 			Query query = new Query(search);
+			query.setResultType(ResultType.mixed);
 			query.count(100);
 			query.since(ultimoDia.format(dateTimeFormatter));
 			QueryResult resultado = twitter.search(query);
+			
+			while (resultado.hasNext()) {
+				
+				tweets.addAll(resultado.getTweets());
+				resultado = twitter.search(resultado.nextQuery());
+			}
 
-			tweets = resultado.getTweets();
 		} catch (TwitterException e) {
 			System.err.println("Erro ao realizar busca");
 			e.printStackTrace();

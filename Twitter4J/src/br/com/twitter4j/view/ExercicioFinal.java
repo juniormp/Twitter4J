@@ -9,7 +9,7 @@ public class ExercicioFinal {
 	public static void main(String[] args) {
 		
 		TwitterService ts = new TwitterService();
-		String tag = "#jvm";
+		String tag = "#java9";
 		
 		System.out.println("==> 1. Quantidade por dia de tweets da última semana.");
 		ts.consultarTotaisDeTweetsDaUltimaSemana(tag).forEach((k,v)->{
