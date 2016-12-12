@@ -11,7 +11,7 @@ public class ExercicioFinal {
 	public static void main(String[] args) {
 		
 		TwitterService ts = new TwitterService();
-		String tag = "#Java9";
+		String tag = "#java9";
 		
 		Set<Status> tweets = ts.consultarTweetsUltimaSemana(tag);
 		
