@@ -190,12 +190,11 @@ public class TwitterService {
 
 	public Set<Status> organizarTweetsOrdernadosPorDataERetornaApenasOPrimeiroEOUltimo(Set<Status> tweets) {
 
-		tweets.stream().sorted((a, b) -> a.getUser().getCreatedAt().compareTo(b.getUser().getCreatedAt())); // Ordenando a lista pela data do tweet
-
 		Set<Status> apenasOPrimeiroEOUltimo = new LinkedHashSet<>();
+		
 		if(!tweets.isEmpty()){
-			apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
-			apenasOPrimeiroEOUltimo.add(tweets.stream().reduce((first, second) -> second).get()); // Ultimo
+			apenasOPrimeiroEOUltimo.add(tweets.stream().sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())).findFirst().get()); // Primeiro
+			apenasOPrimeiroEOUltimo.add(tweets.stream().sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())).reduce((first, second) -> second).get()); // Ultimo
 		}
 
 		return apenasOPrimeiroEOUltimo;

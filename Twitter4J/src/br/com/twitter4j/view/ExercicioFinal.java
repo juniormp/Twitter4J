@@ -43,6 +43,7 @@ public class ExercicioFinal {
 		System.out.println();
 		
 //		Ao final, tendo todas os dados reunidos, deverá ser gerado um tweet referenciando o professor @michelpf até a data do término.
+		ts.enviarNovoTweet("Turma 28SCJ - Atividade Final concluída! ");
 		
 	}
 	
