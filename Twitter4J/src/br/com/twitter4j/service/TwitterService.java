@@ -4,10 +4,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,9 +51,7 @@ public class TwitterService {
 	5. Ordenar os tweets por data, e exibir a data mais recente e a menos recente.
 	*/
 
-	public Map<String, Long> consultarTotaisDeTweetsDaUltimaSemana(String search) {
-
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
+	public Map<String, Long> organizarTotaisDeTweetsDaUltimaSemana(Set<Status> tweets) {
 
 		long SEGUNDA_FEIRA = tweets
 			.stream().
@@ -91,9 +88,7 @@ public class TwitterService {
 
 	}
 
-	public Map<String, Long> consultarTotaisDeREtweetsDaUltimaSemana(String search) {
-
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
+	public Map<String, Long> organizarTotaisDeREtweetsDaUltimaSemana(Set<Status> tweets) {
 
 		long SEGUNDA_FEIRA = tweets
 			.stream().
@@ -137,9 +132,7 @@ public class TwitterService {
 
 	}
 
-	public Map<String, Long> consultarTotaisDeTweetsFavoritadosDaUltimaSemana(String search) {
-
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
+	public Map<String, Long> organizarTotaisDeTweetsFavoritadosDaUltimaSemana(Set<Status> tweets) {
 
 		long SEGUNDA_FEIRA = tweets
 			.stream().
@@ -183,11 +176,9 @@ public class TwitterService {
 
 	}
 
-	public Set<Status> consultarTweetsOrdernadosPorNomeERetornaApenasOPrimeiroEOUltimo(String search) {
+	public Set<Status> ordernadosPorNomeERetornaApenasOPrimeiroEOUltimo(Set<Status> tweets) {
 
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
-
-		tweets.sort((a, b) -> a.getUser().getName().compareTo(b.getUser().getName())); // Ordenando a lista pelo nome do autor
+		tweets.stream().sorted((a, b) -> a.getUser().getName().compareTo(b.getUser().getName())); // Ordenando a Seta pelo nome do autor
 
 		Set<Status> apenasOPrimeiroEOUltimo = new LinkedHashSet<>();
 		apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
@@ -196,11 +187,9 @@ public class TwitterService {
 		return apenasOPrimeiroEOUltimo;
 	}
 
-	public Set<Status> consultarTweetsOrdernadosPorDataERetornaApenasOPrimeiroEOUltimo(String search) {
+	public Set<Status> ordernadosPorDataERetornaApenasOPrimeiroEOUltimo(Set<Status> tweets) {
 
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
-
-		tweets.sort((a, b) -> a.getUser().getCreatedAt().compareTo(b.getUser().getCreatedAt())); // Ordenando a lista pela data do tweet
+		tweets.stream().sorted((a, b) -> a.getUser().getCreatedAt().compareTo(b.getUser().getCreatedAt())); // Ordenando a Seta pela data do tweet
 
 		Set<Status> apenasOPrimeiroEOUltimo = new LinkedHashSet<>();
 		apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
@@ -210,9 +199,9 @@ public class TwitterService {
 
 	}
 
-	private List<Status> consultarTweetsUltimaSemana(String search) {
+	public Set<Status> consultarTweetsUltimaSemana(String search) {
 
-		List<Status> tweets = new ArrayList<>();
+		Set<Status> tweets = new HashSet	<>();
 
 		try {
 			LocalDate ultimoDia = LocalDate.now().minusDays(7);
