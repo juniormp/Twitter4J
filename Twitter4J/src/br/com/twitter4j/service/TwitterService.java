@@ -4,20 +4,19 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import br.com.twitter4j.config.TwitterConnection;
 import twitter4j.Query;
+import twitter4j.Query.ResultType;
 import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.Query.ResultType;
 
 /*
 1. Quantidade por dia de tweets da última semana.
@@ -51,9 +50,7 @@ public class TwitterService {
 		return tweet;
 	}
 
-	public Map<String, Long> consultarTotaisDeTweetsDaUltimaSemana(String search) {
-
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
+	public Map<String, Long> organizarTotaisDeTweetsDaUltimaSemana(Set<Status> tweets) {
 
 		long SEGUNDA_FEIRA = tweets
 			.stream().
@@ -90,9 +87,7 @@ public class TwitterService {
 
 	}
 
-	public Map<String, Long> consultarTotaisDeREtweetsDaUltimaSemana(String search) {
-
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
+	public Map<String, Long> organizarTotaisDeREtweetsDaUltimaSemana(Set<Status> tweets) {
 
 		long SEGUNDA_FEIRA = tweets
 			.stream().
@@ -136,9 +131,7 @@ public class TwitterService {
 
 	}
 
-	public Map<String, Long> consultarTotaisDeTweetsFavoritadosDaUltimaSemana(String search) {
-
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
+	public Map<String, Long> organizarTotaisDeTweetsFavoritadosDaUltimaSemana(Set<Status> tweets) {
 
 		long SEGUNDA_FEIRA = tweets
 			.stream().
@@ -182,36 +175,36 @@ public class TwitterService {
 
 	}
 
-	public Set<Status> consultarTweetsOrdernadosPorNomeERetornaApenasOPrimeiroEOUltimo(String search) {
+	public Set<Status> organizarTweetsOrdernadosPorNomeERetornaApenasOPrimeiroEOUltimo(Set<Status> tweets) {
 
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
-
-		tweets.sort((a, b) -> a.getUser().getName().compareTo(b.getUser().getName())); // Ordenando a lista pelo nome do autor
+		tweets.stream().sorted((a, b) -> a.getUser().getName().compareTo(b.getUser().getName())); // Ordenando a lista pelo nome do autor
 
 		Set<Status> apenasOPrimeiroEOUltimo = new LinkedHashSet<>();
-		apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
-		apenasOPrimeiroEOUltimo.add(tweets.stream().reduce((first, second) -> second).get()); // Ultimo
+		if(!tweets.isEmpty()){
+			apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
+			apenasOPrimeiroEOUltimo.add(tweets.stream().reduce((first, second) -> second).get()); // Ultimo
+		}
 
 		return apenasOPrimeiroEOUltimo;
 	}
 
-	public Set<Status> consultarTweetsOrdernadosPorDataERetornaApenasOPrimeiroEOUltimo(String search) {
+	public Set<Status> organizarTweetsOrdernadosPorDataERetornaApenasOPrimeiroEOUltimo(Set<Status> tweets) {
 
-		List<Status> tweets = this.consultarTweetsUltimaSemana(search);
-
-		tweets.sort((a, b) -> a.getUser().getCreatedAt().compareTo(b.getUser().getCreatedAt())); // Ordenando a lista pela data do tweet
+		tweets.stream().sorted((a, b) -> a.getUser().getCreatedAt().compareTo(b.getUser().getCreatedAt())); // Ordenando a lista pela data do tweet
 
 		Set<Status> apenasOPrimeiroEOUltimo = new LinkedHashSet<>();
-		apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
-		apenasOPrimeiroEOUltimo.add(tweets.stream().reduce((first, second) -> second).get()); // Ultimo
+		if(!tweets.isEmpty()){
+			apenasOPrimeiroEOUltimo.add(tweets.stream().findFirst().get()); // Primeiro
+			apenasOPrimeiroEOUltimo.add(tweets.stream().reduce((first, second) -> second).get()); // Ultimo
+		}
 
 		return apenasOPrimeiroEOUltimo;
 
 	}
 
-	private List<Status> consultarTweetsUltimaSemana(String search) {
+	public Set<Status> consultarTweetsUltimaSemana(String search) {
 
-		List<Status> tweets = new ArrayList<>();
+		Set<Status> tweets = new HashSet<>();
 
 		try {
 			LocalDate ultimoDia = LocalDate.now().minusDays(7);
@@ -219,7 +212,6 @@ public class TwitterService {
 
 			Query query = new Query(search);
 			query.setResultType(ResultType.mixed);
-			query.count(100);
 			query.since(ultimoDia.format(dateTimeFormatter));
 			QueryResult resultado = twitter.search(query);
 
